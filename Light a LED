@@ -11,5 +11,4 @@ void loop() {
 
 digitalWrite(LedPin, HIGH);
 
-
 }
