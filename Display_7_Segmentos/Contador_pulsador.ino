@@ -2,22 +2,36 @@ int contador = 0;
 int botonPin = 2; // Cambia esto al número de tu pin de botón
 int displayPins[] = {3, 4, 5, 6, 7, 8, 9, 10}; // Cambia estos pines a tus conexiones de display
 
+int buttonState = 0;
+int lastButtonState = 0;
+
 void setup() {
+  
   for (int i = 0; i < 7; i++) {
     pinMode(displayPins[i], OUTPUT);
   }
-  pinMode(botonPin, INPUT_PULLUP);
+  
+  pinMode(botonPin, INPUT);
   actualizarDisplay();
+  
 }
 
 void loop() {
-  if (digitalRead(botonPin) == LOW) {
-    contador++;
-    if (contador > 9) {
-      contador = 0;
+  
+buttonState = digitalRead(botonPin);
+  
+    if (buttonState != lastButtonState) 
+  {
+    if (buttonState == HIGH) 
+    {
+      contador++;
+      if (contador > 9) {
+        contador = 0;
+      }
+      actualizarDisplay();
+      delay(250); // Para evitar rebotes en el botón
     }
-    actualizarDisplay();
-    delay(250); // Para evitar rebotes en el botón
+    lastButtonState = buttonState;
   }
 }
 
@@ -35,7 +49,7 @@ void actualizarDisplay() {
     {0, 0, 0, 0, 0, 0, 0}, // 8
     {0, 0, 0, 1, 1, 0, 0}, // 9
   };
-
+  
   for (int i = 0; i < 7; i++) {
     digitalWrite(displayPins[i], numeros[contador][i]);
   }
