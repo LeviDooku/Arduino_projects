@@ -1,41 +1,19 @@
-int contador = 0;
-int botonPin = 2; // Cambia esto al número de tu pin de botón
-int displayPins[] = {3, 4, 5, 6, 7, 8, 9, 10}; // Cambia estos pines a tus conexiones de display
+
+//PINES BOTON
+const int botonPin = 2;
+
+//PINES DISPLAY
+const int displayPins[] = {3, 4, 5, 6, 7, 8, 9, 10};
 
 int buttonState = 0;
 int lastButtonState = 0;
 
-void setup() {
-  
-  for (int i = 0; i < 7; i++) {
-    pinMode(displayPins[i], OUTPUT);
-  }
-  
-  pinMode(botonPin, INPUT);
-  actualizarDisplay();
-  
-}
+int contador = 0;
 
-void loop() {
-  
-buttonState = digitalRead(botonPin);
-  
-    if (buttonState != lastButtonState) 
-  {
-    if (buttonState == HIGH) 
-    {
-      contador++;
-      if (contador > 9) {
-        contador = 0;
-      }
-      actualizarDisplay();
-      delay(250); // Para evitar rebotes en el botón
-    }
-    lastButtonState = buttonState;
-  }
-}
+//Función que contiene la codificación del display
 
 void actualizarDisplay() {
+  
   int numeros[10][7] = {
   //{a, b, c, d, e, f, g}
     {0, 0, 0, 0, 0, 0, 1}, // 0
@@ -53,4 +31,38 @@ void actualizarDisplay() {
   for (int i = 0; i < 7; i++) {
     digitalWrite(displayPins[i], numeros[contador][i]);
   }
+}
+
+void setup() {
+  	
+  //Inicializar pines display
+  
+  for (int i = 0; i < 7; i++) {
+    pinMode(displayPins[i], OUTPUT);
+  }
+  
+  //Inicializar boton e imprimir primer valor display
+  pinMode(botonPin, INPUT);
+  actualizarDisplay();
+}
+
+void loop() {
+  
+buttonState = digitalRead(botonPin); //Leer estado del botón
+  
+  //Incrementar contados si se pulsa el botón
+  if (buttonState != lastButtonState) 
+  {
+    if (buttonState == HIGH) {
+ 
+      contador++;
+      if (contador > 9) {
+        contador = 0;
+      }
+      actualizarDisplay();
+      delay(250);
+    }
+    lastButtonState = buttonState;
+  }
+
 }
